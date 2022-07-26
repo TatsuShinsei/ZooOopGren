@@ -1,4 +1,4 @@
-from . import Bag
+from . import Bag, Item
 
 
 class NamedMeta(type):
@@ -22,7 +22,7 @@ class Player(metaclass=NamedMeta):
         self.items = list()
         self.pos = [0, 0]
 
-    def add_items(self, arg):
+    def add_items(self, arg: Item or list[Item]):
         if isinstance(arg, list):
             for i in arg:
                 if self.usedslots + i.weight < self.maxslots:
@@ -37,7 +37,7 @@ class Player(metaclass=NamedMeta):
             else:
                 self.bag.add_items(arg)
 
-    def remove_items(self, arg):
+    def remove_items(self, arg: Item or list[Item]):
         if isinstance(arg, list):
             for i in arg:
                 if i in self.items:
@@ -52,7 +52,7 @@ class Player(metaclass=NamedMeta):
                 if arg in self.bag.items:
                     self.bag.remove_items(arg)
 
-    def move(self, arg):
+    def move(self, arg:str):
         match arg:
             case "up":
                 self.pos[1] += 1

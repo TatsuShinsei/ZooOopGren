@@ -2,9 +2,9 @@ from os import system
 from random import seed, randint, choice
 from .objects.Player import Player
 from .objects.Room import Room
+from .objects.Map import Map
 from itertools import groupby
-
-dire = [["north", "south"], ["south", "north"], ["east", "west"], ["west", "east"]]
+from zoo import Zoo
 
 seed(1234)
 
@@ -18,13 +18,13 @@ class NamedMeta(type):
 
 
 class Game(metaclass=NamedMeta):
-    def __init__(self, zoo):
+    def __init__(self, zoo:Zoo):
         self.running = True
         self.zoo = zoo
         self.rooms = list()
         self.player = Player()
         self.__gen_rooms()
-        self.__nrooms = self.zoo.enclosures
+        self.map = Map(self.rooms)
 
     def run(self):
         print(f"Welcome in your zoo {self.player.name}!")
@@ -48,10 +48,13 @@ class Game(metaclass=NamedMeta):
                     self.player.use_item()
                 case "4":
                     clear()
+                    print("-------------------")
                     for i in self.rooms:
-                        print(i.name, i.animals, i.typeofanimals)
+                        print(i.name, i.typeofanimals, i.animals)
                         for wh, nb in i.neightboars.items():
-                            print(f"   {wh} - {nb}")
+                            print(f"   {nb} - {wh}")
+                        print("-------------------")
+                    self.map.create_map()
                     input()
                 case "5":
                     clear()
@@ -67,7 +70,8 @@ class Game(metaclass=NamedMeta):
         print("2 - ranking by height")
         print("3 - ranking by tail")
         print("4 - ranking by wingspan")
-        print("5 - zoo population")
+        print("5 - ranking by maximun jump")
+        print("6 - zoo population")
         print("any - cancel")
         match input():
             case "1":
@@ -96,6 +100,12 @@ class Game(metaclass=NamedMeta):
                     print(f'{pos} - {i}')
                 input("\npress any key to continue")
             case "5":
+                clear()
+                pos = 1
+                for i in self.zoo.order_by_maxjump():
+                    print(f'{pos} - {i}')
+                input("\npress any key to continue")
+            case "6":
                 clear()
                 for key in self.zoo.dct.keys():
                     print(f"{key}:")
@@ -128,24 +138,23 @@ class Game(metaclass=NamedMeta):
                 clear()
 
     def __gen_rooms(self):
-        nrooms = int(self.zoo.enclosures)
 
         def gen_room(r):
             poss = list()
-            for j in range(randint(0, 3)):
-                poss.append(choice(dire))
+            for j in range(randint(1, 2)):
+                poss.append(choice([["north", "south"], ["south", "north"], ["east", "west"], ["west", "east"]]))
 
             poss.sort()
             poss = list(k for k, _ in groupby(poss))
 
             for pos in poss:
-                if pos[1] not in r.neightboars.keys():
-                    if len(self.rooms) <= self.zoo.enclosures:
-                        nr = Room(type(chunk[0]), chunk, {pos[0]: r}, f'room {len(self.rooms)}')
-                        self.rooms.append(nr)
-                        gen_room(nr)
+                if pos[1] not in r.neightboars.keys() and chunked_animals:
+                    chunk = chunked_animals.pop()
+                    nr = Room(type(chunk[0]), chunk, {pos[0]: r}, f'Room {len(self.rooms)}')
+                    self.rooms.append(nr)
+                    gen_room(nr)
 
-        parts = 4
+        parts = 3
         animals = self.zoo.dct
 
         chunked_animals = list()
@@ -155,20 +164,6 @@ class Game(metaclass=NamedMeta):
                 chunked_animals.append(sub_anml[i:i + parts])
 
         chunk = chunked_animals.pop()
-        room = Room(type(chunk[0]), chunk, name="room 0")
-        nrooms -= 1
+        room = Room(type(chunk[0]), chunk, name="Room 0")
         self.rooms.append(room)
         gen_room(room)
-
-    def print_map(self):
-        x = list([["██"] * int(4*1.5)])
-        y = list(x*int(len(self.rooms)*1.5))
-
-        hx = int(len(y[0])/2)
-        print(hx)
-        for x in y:
-            x[hx]= "  "
-        for ix in y:
-            for i in ix:
-                print(i, end="")
-            print()

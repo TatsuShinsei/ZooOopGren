@@ -1,4 +1,4 @@
-from zoo.animals import Animal, Eagle, Lion, Tiger
+from zoo.animals import Animal, Eagle, Lion, Tiger, Dolphin
 
 
 class NamedMeta(type):
@@ -13,7 +13,7 @@ class NoAnimalError(Exception):
 
 
 class Zoo(metaclass=NamedMeta):
-    def __init__(self, animals: list[Animal or Tiger, Lion, Eagle] = None):
+    def __init__(self, animals: list[Animal or Tiger, Lion, Eagle, Dolphin] = None):
         if animals is None:
             raise NoAnimalError()
 
@@ -103,6 +103,16 @@ class Zoo(metaclass=NamedMeta):
                 lst.append(i)
         lst.sort(key=lambda x: x.height)
         lst = [f"{j.name} ({type(j)}) has a height of {j.height} cm" for j in lst]
+        lst.reverse()
+        return lst
+
+    def order_by_maxjump(self) -> list:
+        lst = list()
+        for i in self.animals:
+            if hasattr(i, "maxjump"):
+                lst.append(i)
+        lst.sort(key=lambda x: x.weight)
+        lst = [f"{j.name} ({type(j)}) jumps a maximun of {j.maxjump} mc" for j in lst]
         lst.reverse()
         return lst
 

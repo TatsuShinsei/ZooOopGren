@@ -1,3 +1,5 @@
+from .items.item import Item
+
 class NamedMeta(type):
     def __repr__(cls) -> str:
         return cls.__name__
@@ -10,13 +12,13 @@ class MaxSoltsExeption(Exception):
 
 
 class Bag(metaclass=NamedMeta):
-    def __init__(self, items: list):
+    def __init__(self, items: list[Item]):
         self.items = items
         self.maxslots = 10
         self.usedslots = int()
         self.add_items(items)
 
-    def add_items(self, arg):
+    def add_items(self, arg: Item or list[Item]):
         if isinstance(arg, list):
             for i in arg:
                 if self.usedslots + i.weight > self.maxslots:
@@ -29,7 +31,7 @@ class Bag(metaclass=NamedMeta):
             self.items.append(arg)
             self.usedslots += arg.weight
 
-    def remove_items(self, arg):
+    def remove_items(self, arg: Item or list[Item]):
         if isinstance(arg, list):
             for i in arg:
                 if i in self.items:

@@ -2,7 +2,7 @@ import names
 from game import Game
 from game.objects.items import Key, MagnifyingGlass
 from zoo import Zoo
-from zoo.animals import Lion, Tiger, Eagle
+from zoo.animals import Lion, Tiger, Eagle, Dolphin
 
 foods = ["food1", "food2", "food3", "food4", "food5", "food6", "food7", "food8", "food9", "food10"]
 
@@ -55,6 +55,20 @@ def gen_eagle():
     return eagle
 
 
+def gen_dolphin():
+    gender = random.choice(['male', 'female'])
+    name = names.get_first_name(gender=gender)
+    favfood = random.choice(foods)
+    age = random.randint(5, 60)
+    dateofjoin = f"{random.randint(1, 30)}/{random.randint(1, 12)}/{2022 - age + random.randint(0, age)}"
+    weight = round(random.randint(150, 650))
+    height = random.randint(310, 430)
+    jump = random.randint(50, 300)
+    dolphin = Dolphin(name=name, gender=gender, favfood=favfood, age=age, dateofjoin=dateofjoin, weight=weight,
+                    height=height, maxjump=jump)
+    return dolphin
+
+
 for i in range(12):
     total_animals.append(gen_lion())
 
@@ -63,6 +77,8 @@ for i in range(3):
 
 for i in range(4):
     total_animals.append(gen_eagle())
+
+total_animals.append(gen_dolphin())
 
 tatsu_zoo = Zoo(total_animals)
 
@@ -73,7 +89,4 @@ maggalss = MagnifyingGlass("Mag MK1", "Just a magnifying glass", 2)
 
 game.player.add_items([key, maggalss])
 
-print(game.rooms)
-
-game.print_map()
-
+game.run()

@@ -1,14 +1,17 @@
+from zoo.animals import Animal, Dolphin, Tiger, Lion, Eagle
+
+
 class NamedMeta(type):
     def __repr__(cls) -> str:
         return cls.__name__
 
 
 class Room(metaclass=NamedMeta):
-    def __init__(self, typeofanimals, animals, neightboars=None, name="Room"):
+    def __init__(self, typeofanimals: Animal | Dolphin | Lion |Tiger | Eagle, animals:list[Animal | Dolphin and Tiger and Eagle and Lion], neightboars=None, name="Room"):
         if neightboars is None:
             neightboars = dict()
         self.typeofanimals = typeofanimals
-        self.animals = animals
+        self.animals = [a.name for a in animals]
         self.neightboars = neightboars
         self.name = name
 
@@ -28,5 +31,6 @@ class Room(metaclass=NamedMeta):
                     v.neightboars["east"] = self
                 case _:
                     print(f"{k} is not a valid direction, {v}'s neightboars not edited")
+
     def __str__(self):
         return self.name
