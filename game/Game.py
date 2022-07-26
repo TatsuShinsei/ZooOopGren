@@ -129,6 +129,7 @@ class Game(metaclass=NamedMeta):
 
     def __gen_rooms(self):
         nrooms = int(self.zoo.enclosures)
+
         def gen_room(r):
             poss = list()
             for j in range(randint(0, 3)):
@@ -144,7 +145,6 @@ class Game(metaclass=NamedMeta):
                         self.rooms.append(nr)
                         gen_room(nr)
 
-
         parts = 4
         animals = self.zoo.dct
 
@@ -159,3 +159,16 @@ class Game(metaclass=NamedMeta):
         nrooms -= 1
         self.rooms.append(room)
         gen_room(room)
+
+    def print_map(self):
+        x = list([["██"] * int(4*1.5)])
+        y = list(x*int(len(self.rooms)*1.5))
+
+        hx = int(len(y[0])/2)
+        print(hx)
+        for x in y:
+            x[hx]= "  "
+        for ix in y:
+            for i in ix:
+                print(i, end="")
+            print()

@@ -75,5 +75,5 @@ game.player.add_items([key, maggalss])
 
 print(game.rooms)
 
-game.run()
+game.print_map()
 
