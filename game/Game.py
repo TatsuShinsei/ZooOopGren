@@ -131,7 +131,7 @@ class Game(metaclass=NamedMeta):
         nrooms = int(self.zoo.enclosures)
         def gen_room(r):
             poss = list()
-            for j in range(randint(1, 3)):
+            for j in range(randint(0, 3)):
                 poss.append(choice(dire))
 
             poss.sort()
