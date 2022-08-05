@@ -13,7 +13,7 @@ random.seed(seed)
 total_animals = list()
 
 
-def gen_lion():
+def gen_lion() -> Lion:
     gender = random.choice(['male', 'female'])
     name = names.get_first_name(gender=gender)
     favfood = random.choice(foods)
